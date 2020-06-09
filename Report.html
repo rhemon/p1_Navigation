@@ -13441,7 +13441,7 @@ States have length: 37
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>After several trial and errors I ended up keeping the following neural network architeture for this problem. The following has seven hidden layers. Each hidden layers uses ReLu activation.</p>
+<h4 id="Network-Strucutre">Network Strucutre<a class="anchor-link" href="#Network-Strucutre">&#182;</a></h4><p>After several trial and errors I ended up keeping the following neural network architeture for this problem. The following has seven hidden layers. Each hidden layers uses ReLu activation.</p>
 
 </div>
 </div>
@@ -13493,10 +13493,11 @@ States have length: 37
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The following code was mainly brought from the dqn_agent.py file from a previous practice project in the nanodegree. It has the code for Agent and ReplayBuffer class. ReplayBuffer class allows to train the model using Experience Replay. It keeps in memory previous 100 thousand steps and trains the model using a batch size of 64.</p>
+<h5 id="Hyperparameters,-Learning-Algorithm">Hyperparameters, Learning Algorithm<a class="anchor-link" href="#Hyperparameters,-Learning-Algorithm">&#182;</a></h5><p>The following code was mainly brought from the dqn_agent.py file from a previous practice project in the nanodegree. It has the code for Agent and ReplayBuffer class. ReplayBuffer class allows to train the model using Experience Replay. It keeps in memory previous 100 thousand steps and trains the model using a batch size of 64.</p>
 <p>I only updated the learning rate and tau that is used to update the target parameters. As I did trial and error I noticed that the lower rate and tau made the progression slow, but by increase these the the agent achieved an average score above 13 much earlier.</p>
 <p>Alongside experience replay agent also learns using fixed q target, so having a lightly higher tau keeps the target changing a bit more rapidly.</p>
 <p>The agent also used epsilon greedy approach to picking actions, to allow the agent to explore the states instead of focusing on exploiting from the get go. Especially for this time of environment, I believe exploration is quite important. With low epsilon it can end up in situations where the agent gets stuck at a point, where it will keep turning and moving back and forth as just movements give no reward. So for example if a blue banana stays ahead the agent might end up getting stuck their moving back and forth or turning left and right, but having high exploration will make it try new things on learning and on the longer run help it become better at performing its task.</p>
+<p>The learning algorithm takes the batch of experiences and uses the the target network to determine the state-action value pair for the taken actions using the local qnetwork model. It calculates a value Q-value for next states and then uses <code>rewards + (gamma * Q_next_states * (1 - dones))</code> to get current states Q-value. Which is then taken to compare with Q-value determined the local network. Using mean square error loss (mse_loss) it the difference between target and local Q-value is determined and performs gradient descent on the local model based on that. And afterwards it does a soft update of the target Q network, affecting a small change for the changes in local model.</p>
 <p>Once again the base code for all of the above was obtained from the workspace, I only played with the hyperparameters to bring better performance in the agent.</p>
 
 </div>
@@ -13683,7 +13684,8 @@ States have length: 37
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The following function is the training block for the agent. This is also brought from the previous practice project in the nanodegree program, but slightly changed. I updated to keep a frequent checkpoint and updated the eps decay rate, so that the learning hopes to explore for around first 1500 episodes. The code also saves an optimum model which outperforms all the epsiodes in training. Although this wouldn't be very reliable as it is not guarnated the model caused better performance or was it just lucky on its random picks. But even so the pick on general should push the model in a positive direction.</p>
+<h4 id="Learning-Iteration">Learning Iteration<a class="anchor-link" href="#Learning-Iteration">&#182;</a></h4><p>The following function is the training block for the agent. This is also brought from the previous practice project in the nanodegree program, but slightly changed. I updated to keep a frequent checkpoint and updated the eps decay rate, so that the learning hopes to explore for around first 1500 episodes. The code also saves an optimum model which outperforms all the epsiodes in training. Although this wouldn't be very reliable as it is not guarnated the model caused better performance or was it just lucky on its random picks. But even so the pick on general should push the model in a positive direction.</p>
+<p>As mentioned before it uses epsilon greedy approach to pick an action. Once it takes the action it invokes the step in the environmenet collecting the new state details along with reward and done status. It then adds that step to agent, where the agent will invoke the learning algorithm at every few steps to updat its local network model and target network model.</p>
 
 </div>
 </div>
@@ -13826,7 +13828,7 @@ Episode 1800	Average Score: 14.09, Max score: 24.0, Min score: 1.0
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Above you can see the model get average score of 13+ by 1200 episodes, having a higher learning rate and tau helped it to acheive that score much faster but also due to that the variation is much higher.</p>
+<h4 id="Performance">Performance<a class="anchor-link" href="#Performance">&#182;</a></h4><p>Above you can see the model get average score of 13+ by 1200 episodes, having a higher learning rate and tau helped it to acheive that score much faster but also due to that the variation is much higher.</p>
 <p>This is why below I do a quick comparison over 100 episodes for the three different checkpoints I have saved. One is the checkpoint that is updated every time agent gets into the terminal state of the environment. One is checkpoint for every step, so it is the final state, and the other is the optimum checkpoint, which saves whenever the highest score increases.</p>
 <p>And as we can see this gave the highest average score.</p>
 
@@ -13884,7 +13886,8 @@ Episode 100	Average Score: 14.57, Max score: 23.0, Min score: 2.0</pre>
 <div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">env_info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">train_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="n">brain_name</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">agent</span><span class="o">.</span><span class="n">qnetwork_local</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pth&#39;</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">))</span>
+<span class="n">env_info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">train_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="n">brain_name</span><span class="p">]</span>
 <span class="n">state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">env_info</span><span class="o">.</span><span class="n">vector_observations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">blue_ban</span> <span class="o">=</span> <span class="mi">0</span>
@@ -13938,8 +13941,11 @@ Final score 17.0
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>So in most cases it does try to avoid the blue bananas but it still according to me at cases fails to achieve something even higher. For example in some cases maybe going pass a blue banana would result in getting more yellow bananas resulting and overall higher score. Or in some cases it just keeps going forward where there is nothing ahead. Sometimes it would get on the walls as well.</p>
-<p>The learning should be adapted to pick on these situations. Defintely for longer could help picking up on these conditions and improve on the long run. Some other approaches and ways to resolve are discussed in the README file.</p>
+<h4 id="Problems-and-Improvment">Problems and Improvment<a class="anchor-link" href="#Problems-and-Improvment">&#182;</a></h4><p>While the goal of the project is obtained there are multiple places to improve. To begin with there could have been significant improvement if I made use of better alogrithms like Double DQN, Duelling DQN or Prioritized Experience Replay.</p>
+<p>A common problem identified is that it does try to avoid the blue bananas but it still according to me at cases fails to achieve something even higher. For example in some cases maybe going pass a blue banana would result in getting more yellow bananas resulting and overall higher score. Or in some cases it just keeps going forward where there is nothing ahead. Sometimes it would get on the walls as well. It was suggested in my feedback that these overfitting problems could have been reduced by adapting regularization techniques such as L2 or Dropout.</p>
+<p>The agent mostly chooses to go to its nearest yellow banana avoiding the blue ones direction in most cases, but in certain cases it could be that going through the blue banana would end up resulting it to get even more yellow bananas. While discount rate during training I used was already high, but it could posibly been improved if we did Prioritized Experience Replay. As it would work more on the TD errors.</p>
+<p>For reducing the moves toward an empty area, we could introduce a small penalty for moves where you dont collect anything. This could help the agent to learn to pick more bananas in fewer steps. But another thing that could help is using Double DQN as it helps avoid overestimation of the Q-value.</p>
+<p>Another point mentioned in my project feeback was that the network architecture was a bit of an overkill. A much smaller network could possibly have obtained the same achievement in a bit more episodes, and on the long run this is something that would be more preferable compared to a large network. Which is indeed true, as shared before the large network ends up sort of overfitting. While it achieves the goal, the performance can't really be marked as the optimum performance. Exploring other algorithms could have helped improve the performance much better.</p>
 
 </div>
 </div>
