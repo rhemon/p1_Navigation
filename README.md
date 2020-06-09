@@ -99,11 +99,13 @@ At the end with the final changes the agent achieved 13+ average score by 1200th
 
 While the goal of the project is obtained there are multiple places to improve. To begin with there could have been significant improvement if I made use of better alogrithms like Double DQN, Duelling DQN or Prioritized Experience Replay.
 
-Some common problem identified by me in this trained agent was there are siutations where it keeps moving forward when there is nothing ahead. It should turn around by that point to move towards a better locaiton.
+A common problem identified is that it does try to avoid the blue bananas but it still according to me at cases fails to achieve something even higher. For example in some cases maybe going pass a blue banana would result in getting more yellow bananas resulting and overall higher score. Or in some cases it just keeps going forward where there is nothing ahead. Sometimes it would get on the walls as well. It was suggested in my feedback that these overfitting problems could have been reduced by adapting regularization techniques such as L2 or Dropout.
 
-The agent mostly chooses to go to its nearest yellow banana avoiding the blue ones direction in most cases, but in certain cases it could be that going through the blue banana would end up resulting it to get even more yellow bananas. While discount rate during training I used was already high, but it could posibly been improved if we did Prioritized Experience Replay.
+The agent mostly chooses to go to its nearest yellow banana avoiding the blue ones direction in most cases, but in certain cases it could be that going through the blue banana would end up resulting it to get even more yellow bananas. While discount rate during training I used was already high, but it could posibly been improved if we did Prioritized Experience Replay. As it would work more on the TD errors.
 
-For reducing the moves toward a empty area, we could introduce a small penalty for moves where you dont collect anything. This could help the agent to learn to pick more bananas in fewer steps.
+For reducing the moves toward an empty area, we could introduce a small penalty for moves where you dont collect anything. This could help the agent to learn to pick more bananas in fewer steps. But another thing that could help is using Double DQN as it helps avoid overestimation of the Q-value.
+
+Another point mentioned in my project feeback was that the network architecture was a bit of an overkill. A much smaller network could possibly have obtained the same achievement in a bit more episodes, and on the long run this is something that would be more preferable compared to a large network. Which is indeed true, as shared before the large network ends up sort of overfitting. While it achieves the goal, the performance can't really be marked as the optimum performance. Exploring other algorithms could have helped improve the performance much better.
 
 ### Thank you
 
