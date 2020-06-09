@@ -39,6 +39,48 @@ pip install ./python
 
 The starting code for the project was collected from there and also a lot of the code to train the DQN Agent was also gathered from previous practice projects in the nanodegree program.
 
+### Running the project
+
+As mentioned earlier the project requires unityagents installed. If you used the above way to install it should have already set up all the necessary libraries, otherwise do ensure you have pytorch installed.
+
+You can always open up `Report.ipynb` file on Jupyter notebook to re run the cells. You can avoid the cell that calls `dqn` to make the agent learn and instead
+just load `.pth` file into `qnetwork_local`. The second last cell does that and then does a iteration through the environment. If you wish to run it externally, you can just copy paste the class code for `Agent`, `ReplayBuffer` and `Network`. And then do the followings:
+
+```
+# update path to file, if its different for you
+env = UnityEnvironment(file_name="Banana_Windows_x86_64/Banana.exe")
+
+# resent environment to a fresh start, set train_mode to True if you dont wish the GUI to run
+env_info = env.reset(train_mode=False)[brain_name]
+action_size = brain.vector_action_space_size
+
+# get current state
+state = env_info.vector_observations[0]
+state_size = len(state)
+
+# initialize agent and load in the parameters for the model
+agent = Agent(state_size, action_size, 0)
+agent.qnetwork_local.load_state_dict(torch.load('model.pth', map_location='cpu'))
+
+state = torch.from_numpy(env_info.vector_observations[0]).float().unsqueeze(0)
+score = 0
+
+# Iterate to take action for the state and update with the new state
+for i in range(10000):
+    # choose best action according to network
+    action = np.argmax(agent.qnetwork_local(state).cpu().data.numpy())
+    env_info = env.step(int(action))[brain_name]
+    
+    # update states and variables
+    state = torch.from_numpy(env_info.vector_observations[0]).float().unsqueeze(0)
+    reward = env_info.rewards[0]
+    done = env_info.local_done[0]
+    score += reward
+    if done:
+        break
+print("Final score", score)
+```
+
 ### Approach
 
 My approach to this problem was quite simple. I wanted to try out different neural network models, and play around with the parameters to run into a good performing model. Trying to train a simple agent usign experience replay, fixed q target and use epsilon greedy method to promote exploration more than exploitaiton.
